@@ -12,7 +12,10 @@
 git clone https://github.com/anthropics/skills.git ~/.anthropic-skills
 
 mkdir -p ~/.config/opencode/skills
-ln -s ~/.anthropic-skills/skills/* ~/.config/opencode/skills/
+for skill in ~/.anthropic-skills/skills/*/; do
+    skill_name=$(basename "$skill")
+    ln -s "$skill" ~/.config/opencode/skills/anthropic-"$skill_name"
+done
 ```
 
 ### Windows (PowerShell)
@@ -22,7 +25,7 @@ git clone https://github.com/anthropics/skills.git "$env:USERPROFILE\.anthropic-
 
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\skills"
 Get-ChildItem "$env:USERPROFILE\.anthropic-skills\skills" -Directory | ForEach-Object {
-    New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\skills\$($_.Name)" -Target $_.FullName
+    New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\skills\anthropic-$($_.Name)" -Target $_.FullName
 }
 ```
 
@@ -76,14 +79,14 @@ Symlinks will automatically point to the updated content — no need to re-link.
 ### macOS / Linux
 
 ```bash
-rm -rf ~/.config/opencode/skills
+rm -f ~/.config/opencode/skills/anthropic-*
 rm -rf ~/.anthropic-skills
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-Remove-Item -Recurse -Force "$env:USERPROFILE\.config\opencode\skills"
+Get-ChildItem "$env:USERPROFILE\.config\opencode\skills\anthropic-*" | Remove-Item -Force
 Remove-Item -Recurse -Force "$env:USERPROFILE\.anthropic-skills"
 ```
 
